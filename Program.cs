@@ -24,9 +24,11 @@ namespace SoccerStats
             var topTenPlayers = GetTopTenPlayers(players);
             foreach(var player in topTenPlayers)
             {
-                Console.WriteLine("Name: " + player.SecondName + ", " + player.FirstName +"  Score: " + player.PointsPerGame );
+                Console.WriteLine("Name: " + player.SecondName + ", " + player.FirstName + "\t Score: " + player.PointsPerGame );
 
             }
+            fileName = Path.Combine(directory.FullName, "topten.json");
+            SerializePlayerToFile(topTenPlayers, fileName);
         }
     
         public static string ReadFile(string fileName)
@@ -119,6 +121,16 @@ namespace SoccerStats
                     break;
             }
             return topTenPlayers;
+        }
+
+        public static void SerializePlayerToFile(List<Player> players, string fileName)
+        {
+            var serializer = new JsonSerializer();
+            using(var writer = new StreamWriter(fileName))
+            using (var jsonWriter = new JsonTextWriter(writer))
+            {
+                serializer.Serialize(jsonWriter, players);
+            }
         }
     }
 }
